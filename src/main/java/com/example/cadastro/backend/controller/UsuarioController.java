@@ -3,6 +3,7 @@ package com.example.cadastro.backend.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,23 +26,26 @@ public class UsuarioController {
     private UsuarioRepository repo;
 
     @PostMapping("/cadastrar")
-    public Usuario novoUsuario(@RequestBody Usuario usuario){
-        return repo.save(usuario);
+    public ResponseEntity<Usuario> novoUsuario(@RequestBody Usuario usuario){
+        Usuario novoUsuario = repo.save(usuario);
+        return ResponseEntity.status(201).body(novoUsuario);
     }
 
     @GetMapping("/listar")
-    public List<Usuario> listaUsuarios(){
-        return repo.findAll();
+    public ResponseEntity <List<Usuario>> listaUsuarios(){
+        List<Usuario> lista = (List<Usuario>) repo.findAll();
+        return ResponseEntity.status(200).body(lista);
     }
 
     @PutMapping("/atualizarCadastro")
-    public Usuario atualizar(@RequestBody Usuario usuario){
+    public ResponseEntity<Usuario> atualizar(@RequestBody Usuario usuario){
         Usuario novoUsuario = repo.save(usuario);
-        return novoUsuario;
+        return ResponseEntity.status(0).body(novoUsuario);
     }
 
     @DeleteMapping("/excluir/{id}")
-    public void excluir(@PathVariable Long id){
+    public ResponseEntity<?> excluir(@PathVariable Long id){
         repo.deleteById(id);
+        return ResponseEntity.status(204).build();
     }
 }
