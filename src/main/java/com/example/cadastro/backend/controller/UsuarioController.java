@@ -16,7 +16,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.cadastro.backend.entity.Usuario;
 import com.example.cadastro.backend.repository.UsuarioRepository;
+import com.example.cadastro.backend.service.UsuarioService;
 
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+
+@AllArgsConstructor
+@NoArgsConstructor
 @RestController
 @CrossOrigin("*")
 @RequestMapping("/usuarios")
@@ -24,17 +30,22 @@ public class UsuarioController {
 
     @Autowired
     private UsuarioRepository repo;
+    
+    @Autowired
+    private UsuarioService usuarioService;
+
+    public UsuarioController(UsuarioService usuarioService){
+        this.usuarioService = usuarioService;
+    }
 
     @PostMapping("/cadastrar")
     public ResponseEntity<Usuario> novoUsuario(@RequestBody Usuario usuario){
-        Usuario novoUsuario = repo.save(usuario);
-        return ResponseEntity.status(201).body(novoUsuario);
+        return ResponseEntity.status(201).body(usuarioService.criarUsuario(usuario));
     }
 
     @GetMapping("/listar")
     public ResponseEntity <List<Usuario>> listaUsuarios(){
-        List<Usuario> lista = (List<Usuario>) repo.findAll();
-        return ResponseEntity.status(200).body(lista);
+        return ResponseEntity.status(200).body(usuarioService.listarUsuarios());
     }
 
     @PutMapping("/atualizarCadastro")
