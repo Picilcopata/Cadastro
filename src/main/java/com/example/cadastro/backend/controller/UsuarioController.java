@@ -21,16 +21,12 @@ import com.example.cadastro.backend.service.UsuarioService;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
-@AllArgsConstructor
 @NoArgsConstructor
 @RestController
 @CrossOrigin("*")
 @RequestMapping("/usuarios")
 public class UsuarioController {
 
-    @Autowired
-    private UsuarioRepository repo;
-    
     @Autowired
     private UsuarioService usuarioService;
 
@@ -44,19 +40,18 @@ public class UsuarioController {
     }
 
     @GetMapping("/listar")
-    public ResponseEntity <List<Usuario>> listaUsuarios(){
+    public ResponseEntity <List<Usuario>> listarUsuarios(){
         return ResponseEntity.status(200).body(usuarioService.listarUsuarios());
     }
 
     @PutMapping("/atualizarCadastro")
     public ResponseEntity<Usuario> atualizar(@RequestBody Usuario usuario){
-        Usuario novoUsuario = repo.save(usuario);
-        return ResponseEntity.status(0).body(novoUsuario);
+        return ResponseEntity.status(200).body(usuarioService.atualizarCadastro(usuario));
     }
 
     @DeleteMapping("/excluir/{id}")
     public ResponseEntity<?> excluir(@PathVariable Long id){
-        repo.deleteById(id);
+        usuarioService.excluir(id);
         return ResponseEntity.status(204).build();
     }
 }
