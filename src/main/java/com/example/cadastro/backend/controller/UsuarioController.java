@@ -3,6 +3,7 @@ package com.example.cadastro.backend.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -20,6 +21,7 @@ import com.example.cadastro.backend.service.UsuarioService;
 
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
+import lombok.val;
 
 @NoArgsConstructor
 @RestController
@@ -39,19 +41,28 @@ public class UsuarioController {
         return ResponseEntity.status(201).body(usuarioService.criarUsuario(usuario));
     }
 
-    @GetMapping("/listar")
+    @GetMapping
     public ResponseEntity <List<Usuario>> listarUsuarios(){
         return ResponseEntity.status(200).body(usuarioService.listarUsuarios());
     }
 
-    @PutMapping("/atualizarCadastro")
+    @PutMapping("/atualizar")
     public ResponseEntity<Usuario> atualizar(@RequestBody Usuario usuario){
         return ResponseEntity.status(200).body(usuarioService.atualizarCadastro(usuario));
     }
 
-    @DeleteMapping("/excluir/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<?> excluir(@PathVariable Long id){
         usuarioService.excluir(id);
         return ResponseEntity.status(204).build();
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<Usuario> validarSenha(@RequestBody Usuario usuario){
+        Boolean valid = usuarioService.validarSenha(usuario);
+        if (!valid) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        return ResponseEntity.status(200).build();
     }
 }
