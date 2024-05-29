@@ -22,13 +22,10 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.cadastro.backend.entity.Usuario;
-import com.example.cadastro.backend.repository.UsuarioRepository;
 import com.example.cadastro.backend.service.UsuarioService;
 
 import jakarta.validation.Valid;
-import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
-import lombok.val;
 
 @NoArgsConstructor
 @RestController
